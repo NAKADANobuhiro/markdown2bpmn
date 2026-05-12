@@ -146,6 +146,9 @@ html, body { height: 100%; font-family: system-ui, -apple-system, sans-serif; ba
 /* bpmn-js キャンバスが伸びるよう調整 */
 #bpmn-container .djs-container,
 #bpmn-container svg { width: 100% !important; height: 100% !important; }
+/* "powered by bpmn.io" バッジ内の SVG は上記ルールで潰れるため、
+   インラインスタイル相当（auto）に戻す。!important は上のルールを上書きするのに必要。 */
+#bpmn-container .bjs-powered-by svg { width: auto !important; height: auto !important; }
 
 /* ─── エラーバナー ─── */
 #error-banner {
@@ -171,9 +174,10 @@ html, body { height: 100%; font-family: system-ui, -apple-system, sans-serif; ba
 #error-banner.visible { display: block; }
 
 /* ─── Fit ボタン（右ペイン内） ─── */
+/* bpmn.io バッジ (bottom:15px, 高さ 21px) と重ならないよう上にずらす。 */
 #btn-fit {
   position: absolute;
-  bottom: 16px;
+  bottom: 48px;
   right: 16px;
   z-index: 6;
   padding: 5px 12px;
