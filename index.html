@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown2BPMN</title>
+
+  <!-- スタイルシート -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- bpmn-js (読み取り専用 + ズーム・パン) ※インターネット接続が必要 -->
+  <script src="https://unpkg.com/bpmn-js@17/dist/bpmn-navigated-viewer.development.js"></script>
+</head>
+<body>
+
+<!-- ─── ヘッダー ─── -->
+<header id="header">
+  <h1><span>Markdown</span>2<span>BPMN</span></h1>
+  <button class="btn btn-primary" id="btn-convert" title="Ctrl+Enter">
+    ▶ 変換
+  </button>
+  <button class="btn btn-success" id="btn-export" disabled>
+    ↓ エクスポート
+  </button>
+</header>
+
+<!-- ─── メイン ─── -->
+<div id="main">
+
+  <!-- 左ペイン: Markdown エディター -->
+  <div class="pane" id="left-pane">
+    <div class="pane-header">
+      <span class="label">Markdown</span>
+      <span class="kbd">Ctrl+Enter</span> で変換
+    </div>
+    <textarea id="md-editor" placeholder="ここに Markdown を入力してください...
+---
+process_id: my-process
+process_name: プロセス名
+---
+## レーン
+- **担当者A** (actor_a): 説明
+..."></textarea>
+    <div id="status-bar">
+      <div class="spinner"></div>
+      <span class="status-text">待機中</span>
+      <span id="char-count"></span>
+    </div>
+  </div>
+
+  <!-- ドラッグ可能な区切り線 -->
+  <div id="divider"></div>
+
+  <!-- 右ペイン: BPMN ダイアグラム -->
+  <div class="pane" id="right-pane">
+    <div class="pane-header">
+      <span class="label">BPMN ダイアグラム</span>
+    </div>
+    <!-- エラーバナー -->
+    <div id="error-banner"></div>
+    <!-- BPMN キャンバス -->
+    <div id="bpmn-container"></div>
+    <!-- 空状態 -->
+    <div id="empty-state">
+      <span class="icon">📋</span>
+      <span>左ペインに Markdown を入力すると<br>ダイアグラムが表示されます</span>
+    </div>
+    <!-- Fit ボタン -->
+    <button class="btn btn-neutral" id="btn-fit" style="display:none">⊡ Fit</button>
+  </div>
+
+</div>
+
+<!--
+  スクリプト読み込み順序:
+  1. bpmn-js (CDN, 上部 <head> に記載済み) → BpmnJS グローバルを定義
+  2. generate_bpmn.js → convertMarkdown() グローバルを定義
+  3. sample.js     → SAMPLE_MARKDOWN グローバルを定義
+  4. app.js        → UI ロジック（上記すべてに依存）
+-->
+<script src="js/generate_bpmn.js"></script>
+<script src="js/sample.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
