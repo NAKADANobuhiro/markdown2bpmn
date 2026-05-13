@@ -124,7 +124,7 @@ flowchart TD
     viewer["bpmn-js (Viewer)<br/>・importXML<br/>・描画"]
 
     textarea -->|入力| app
-    app -->|convertMarkdown(md)| gen
+    app -->|"convertMarkdown(md)"| gen
     gen -->|BPMN 2.0 XML string| viewer
 ```
 
