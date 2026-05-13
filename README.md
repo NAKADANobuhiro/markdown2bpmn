@@ -116,28 +116,16 @@ process_name: サンプルプロセス
 
 ## アーキテクチャ
 
-```
-┌─────────────────┐    入力     ┌────────────────────────┐
-│  <textarea>     │ ─────────→ │  app.js (UI レイヤー)   │
-│  Markdown       │             │  ・デバウンス           │
-└─────────────────┘             │  ・状態管理             │
-                                │  ・エラー表示           │
-                                └───────────┬────────────┘
-                                            │ convertMarkdown(md)
-                                            ▼
-                                ┌────────────────────────┐
-                                │  generate_bpmn.js       │
-                                │  ・パース               │
-                                │  ・モデル構築           │
-                                │  ・XML 生成             │
-                                └───────────┬────────────┘
-                                            │ BPMN 2.0 XML (string)
-                                            ▼
-                                ┌────────────────────────┐
-                                │  bpmn-js (Viewer)      │
-                                │  ・importXML            │
-                                │  ・描画                 │
-                                └────────────────────────┘
+```mermaid
+flowchart TD
+    textarea["&lt;textarea&gt;<br/>Markdown"]
+    app["app.js (UI レイヤー)<br/>・デバウンス<br/>・状態管理<br/>・エラー表示"]
+    gen["generate_bpmn.js<br/>・パース<br/>・モデル構築<br/>・XML 生成"]
+    viewer["bpmn-js (Viewer)<br/>・importXML<br/>・描画"]
+
+    textarea -->|入力| app
+    app -->|convertMarkdown(md)| gen
+    gen -->|BPMN 2.0 XML string| viewer
 ```
 
 | ファイル              | 役割                                                                |
