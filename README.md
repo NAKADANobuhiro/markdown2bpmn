@@ -1,162 +1,164 @@
 # Markdown2BPMN — Web UI
 
-Markdown で記述した業務フローを、**ブラウザ上でリアルタイムに BPMN ダイアグラムへ変換**する Web アプリです。
-サーバー・インストール・ビルド一切不要。`index.html` を開くだけで動きます。
+[日本語版 / Japanese](./README.ja.md)
+
+A web app that **converts business flows written in Markdown into BPMN diagrams in real time, right in your browser**.
+No server, no installation, no build step. Just open `index.html`.
 
 ![layout](https://img.shields.io/badge/layout-2_pane-blue) ![deps](https://img.shields.io/badge/install-zero-green) ![server](https://img.shields.io/badge/server-not_required-brightgreen)
 
 ---
 
-## 特徴
+## Features
 
-- **ゼロインストール**: HTML/CSS/JS のみ。Python も Node.js も不要
-- **リアルタイムプレビュー**: 入力から 800ms 後に自動変換、Ctrl+Enter で即時変換
-- **bpmn-js による高品質な描画**: ズーム・パン・Fit 操作対応
-- **`.bpmn` エクスポート**: Camunda Modeler / bpmn.io で開けるファイルを出力
-- **Python 版と互換**: `../generate_bpmn.py` と同じ Markdown 記法
+- **Zero install**: HTML/CSS/JS only. No Python or Node.js required
+- **Real-time preview**: Auto-converts 800ms after typing stops; `Ctrl+Enter` for instant conversion
+- **High-quality rendering via bpmn-js**: Zoom, pan, and fit operations supported
+- **`.bpmn` export**: Output files can be opened in Camunda Modeler / bpmn.io
+- **Compatible with the Python version**: Same Markdown syntax as `../generate_bpmn.py`
 
-> bpmn-js のみ unpkg CDN から取得するため、**初回起動時はインターネット接続が必要**です。
+> Only bpmn-js is fetched from the unpkg CDN, so **an internet connection is required on first launch**.
 
 ---
 
-## クイックスタート
+## Quick Start
 
-### 方法 1: ファイルを直接開く（最も簡単）
+### Option 1: Open the file directly (easiest)
 
 ```powershell
 # Windows
 Start-Process .\index.html
 
-# または index.html をダブルクリック
+# Or just double-click index.html
 ```
 
-### 方法 2: ローカルサーバーで起動（推奨）
+### Option 2: Serve via a local HTTP server (recommended)
 
 ```powershell
 python -m http.server 8000
-# → ブラウザで http://localhost:8000/ を開く
+# → Open http://localhost:8000/ in your browser
 ```
 
-ブラウザで開くと、左ペインのサンプル Markdown が自動的に右ペインで BPMN として描画されます。
+Once opened, the sample Markdown in the left pane is automatically rendered as a BPMN diagram in the right pane.
 
 ---
 
-## 画面構成
+## Layout
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│ Markdown2BPMN          [▶ 変換] [↓ エクスポート]         │ ← ヘッダー
+│ Markdown2BPMN          [▶ Convert] [↓ Export]            │ ← Header
 ├──────────────────────┬──────────────────────────────────┤
-│ Markdown             │ BPMN ダイアグラム                │
+│ Markdown             │ BPMN Diagram                     │
 │ ┌──────────────────┐ │ ┌──────────────────────────────┐ │
 │ │ ---              │ │ │                              │ │
 │ │ process_id: ...  │ │ │     ○──[Task]──[Task]──◯    │ │
 │ │ ---              │ │ │                              │ │
-│ │ ## レーン        │ │ │            [Fit]             │ │
+│ │ ## Lanes         │ │ │            [Fit]             │ │
 │ │ ...              │ │ └──────────────────────────────┘ │
 │ │                  │ │                                  │
 │ └──────────────────┘ │                                  │
-│ ● 変換完了 — 18:42:31 │                                  │ ← ステータスバー
+│ ● Converted — 18:42:31│                                 │ ← Status bar
 └──────────────────────┴──────────────────────────────────┘
-       左ペイン                    右ペイン
+       Left pane                  Right pane
 ```
 
-中央の縦線をドラッグするとペイン幅を調整できます。
+Drag the vertical divider in the center to resize the panes.
 
 ---
 
-## 操作方法
+## Controls
 
-| 操作                  | 内容                                              |
-|-----------------------|---------------------------------------------------|
-| 文字入力              | 800ms 後に自動変換                                |
-| `Ctrl+Enter`          | 即時変換                                          |
-| `▶ 変換` ボタン       | 即時変換                                          |
-| `↓ エクスポート` ボタン | 現在のダイアグラムを `.bpmn` としてダウンロード   |
-| `⊡ Fit` ボタン         | ダイアグラム全体を画面に収める                    |
-| `Tab` キー（エディタ） | 2スペース挿入                                      |
-| 中央の縦線をドラッグ   | ペイン幅をリサイズ                                |
+| Action                  | Behavior                                            |
+|-------------------------|-----------------------------------------------------|
+| Type text               | Auto-convert after 800ms                            |
+| `Ctrl+Enter`            | Convert immediately                                 |
+| `▶ Convert` button      | Convert immediately                                 |
+| `↓ Export` button       | Download the current diagram as a `.bpmn` file      |
+| `⊡ Fit` button          | Fit the entire diagram to the viewport              |
+| `Tab` key (in editor)   | Insert 2 spaces                                     |
+| Drag center divider     | Resize panes                                        |
 
 ---
 
-## Markdown の書き方
+## Markdown Syntax
 
-詳細は親プロジェクトの [README](../README.md) を参照してください。
+See the parent project's [README](../README.md) for the full specification.
 
-### 最小例
+### Minimal example
 
 ```markdown
 ---
 process_id: my-process
-process_name: サンプルプロセス
+process_name: Sample Process
 ---
 
-## レーン
-- **担当者A** (actor_a): 説明
-- **担当者B** (actor_b): 説明
+## Lanes
+- **Actor A** (actor_a): description
+- **Actor B** (actor_b): description
 
-## フロー
-1. [actor_a] 開始タスク
-2. [actor_b] 終了タスク <END>
+## Flow
+1. [actor_a] Start task
+2. [actor_b] End task <END>
 ```
 
-### 記法早見表
+### Syntax cheat sheet
 
-| 記法                    | 意味                         |
-|-------------------------|------------------------------|
-| `N. [lane_id] タスク名` | 通常タスク                   |
-| `<GW: ラベル>`          | 排他ゲートウェイ（条件分岐） |
-| `<GW\|\|: ラベル>`      | 並列ゲートウェイ             |
-| `<END>`                 | 終了イベント                 |
-| `→ N`                   | ステップ N へ移動            |
-| `- 条件 → N`            | ゲートウェイ分岐             |
-| `- (デフォルト) → N`    | デフォルト分岐               |
+| Syntax                  | Meaning                              |
+|-------------------------|--------------------------------------|
+| `N. [lane_id] task`     | Regular task                         |
+| `<GW: label>`           | Exclusive gateway (conditional)      |
+| `<GW\|\|: label>`       | Parallel gateway                     |
+| `<END>`                 | End event                            |
+| `→ N`                   | Jump to step N                       |
+| `- condition → N`       | Gateway branch                       |
+| `- (default) → N`       | Default branch                       |
 
 ---
 
-## アーキテクチャ
+## Architecture
 
 ```mermaid
 flowchart TD
     textarea["&lt;textarea&gt;<br/>Markdown"]
-    app["app.js (UI レイヤー)<br/>・デバウンス<br/>・状態管理<br/>・エラー表示"]
-    gen["generate_bpmn.js<br/>・パース<br/>・モデル構築<br/>・XML 生成"]
-    viewer["bpmn-js (Viewer)<br/>・importXML<br/>・描画"]
+    app["app.js (UI layer)<br/>・debouncing<br/>・state management<br/>・error display"]
+    gen["generate_bpmn.js<br/>・parsing<br/>・model building<br/>・XML generation"]
+    viewer["bpmn-js (Viewer)<br/>・importXML<br/>・rendering"]
 
-    textarea -->|入力| app
+    textarea -->|input| app
     app -->|"convertMarkdown(md)"| gen
     gen -->|BPMN 2.0 XML string| viewer
 ```
 
-| ファイル              | 役割                                                                |
-|-----------------------|---------------------------------------------------------------------|
-| `index.html`          | レイアウト・スクリプト読み込み順を定義                              |
-| `css/style.css`       | 2ペイン構成・ヘッダー・ボタン等の全スタイル                         |
-| `js/generate_bpmn.js` | 公開 API: `convertMarkdown(text)` — Markdown を BPMN 2.0 XML に変換 |
-| `js/sample.js`        | 起動時に表示されるサンプル Markdown                                 |
-| `js/app.js`           | DOM 操作・イベント・bpmn-js 連携                                    |
+| File                  | Role                                                                       |
+|-----------------------|----------------------------------------------------------------------------|
+| `index.html`          | Defines the layout and script load order                                   |
+| `css/style.css`       | All styles (2-pane layout, header, buttons, etc.)                          |
+| `js/generate_bpmn.js` | Public API: `convertMarkdown(text)` — converts Markdown to BPMN 2.0 XML    |
+| `js/sample.js`        | Sample Markdown shown on startup                                           |
+| `js/app.js`           | DOM operations, events, bpmn-js integration                                |
 
-`generate_bpmn.js` は `./markdown2bpmn.py` を JavaScript に手動移植したもので、レイアウト定数・バリデーション ID・記法すべてが Python 版と互換です。
-
----
-
-## 既知の制限
-
-- **ファイル → ドラッグ&ドロップで Markdown を開く機能はありません**（コピペで対応してください）
-- **bpmn-js は読み取り専用 Viewer のみ**（モデラーは未搭載。編集は Camunda Modeler 等で行う前提）
-- **オフライン環境では初回起動できません**（bpmn-js を unpkg から取得するため）
-- **モバイル / タブレット未対応**（デスクトップ前提のレイアウト）
+`generate_bpmn.js` is a hand port of `./markdown2bpmn.py` to JavaScript. Layout constants, validation IDs, and syntax are all kept in sync with the Python version.
 
 ---
 
-## 関連プロジェクト
+## Known Limitations
 
-| プロジェクト        | パス                  | 用途                                       |
-|-------------------|-----------------------|--------------------------------------------|
-| Python CLI 版      | `./markdown2bpmn.py`  | 本ディレクトリ単体配布時の CLI 利用       |
-| **本プロジェクト**  | `./` (webui)          | ブラウザ単体で完結する手元利用             |
+- **No file drag-and-drop for opening Markdown** (use copy-paste instead)
+- **bpmn-js is a read-only Viewer** (no modeler bundled — edit with Camunda Modeler if needed)
+- **Cannot launch offline on first run** (bpmn-js is fetched from unpkg)
+- **No mobile / tablet support** (desktop-only layout)
 
-### 同梱 CLI を使う場合
+---
+
+## Related Projects (in this repo)
+
+| Project              | Path                  | Purpose                                              |
+|----------------------|-----------------------|------------------------------------------------------|
+| Python CLI version   | `./markdown2bpmn.py`  | CLI usage when this directory is distributed alone   |
+| **This project**     | `./` (webui)          | Self-contained browser app for local use             |
+
+### Using the bundled CLI
 
 ```powershell
 python .\markdown2bpmn.py <input.md> [-o <output.bpmn>] [--validate] [--verbose]
@@ -164,8 +166,12 @@ python .\markdown2bpmn.py <input.md> [-o <output.bpmn>] [--validate] [--verbose]
 
 ---
 
-## バージョン
+## Related Projects (external)
 
-| バージョン | 日付       | 内容                                |
-|-----------|------------|-------------------------------------|
-| 0.1.0     | 2026-05-12 | 初版（Python 版 v1.1.1 ベースで移植） |
+- [bpmn2visio](https://github.com/NAKADANobuhiro/bpmn2visio/): A tool that converts BPMN 2.0 XML into Microsoft Visio `.vsdx` files
+
+## Version History
+
+| Version | Date       | Notes                                                |
+|---------|------------|------------------------------------------------------|
+| 0.1.0   | 2026-05-12 | Initial release (ported from Python version v1.1.1) |
